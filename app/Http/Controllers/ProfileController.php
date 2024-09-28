@@ -28,6 +28,11 @@ class ProfileController extends Controller
     {
         $request->user()->fill($request->validated());
 
+        // Update the `name` field 
+        if ($request->user()->isDirty('firstname') || $request->user()->isDirty('lastname')) {
+            $request->user()->name = $request->firstname . ' ' . $request->lastname;
+        }
+
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }

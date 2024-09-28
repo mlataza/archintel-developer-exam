@@ -20,9 +20,10 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'firstname' => 'Default',
             'lastname' => 'Editor',
+            'name' => 'Default Editor',
             'type' => UserType::EDITOR,
             'status' => UserStatus::ACTIVE,
-            'email' => 'test@example.com'
+            'email' => 'default.editor@example.com'
         ]);
     }
 }
