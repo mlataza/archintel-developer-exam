@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return Redirect::route('dashboard');
 });
 
 Route::get('/dashboard', function () {
