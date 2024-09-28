@@ -25,5 +25,14 @@ class DatabaseSeeder extends Seeder
             'status' => UserStatus::ACTIVE,
             'email' => 'default.editor@example.com'
         ]);
+
+        User::factory()->create([
+            'firstname' => 'Default',
+            'lastname' => 'Writer',
+            'name' => 'Default Writer',
+            'type' => UserType::WRITER,
+            'status' => UserStatus::ACTIVE,
+            'email' => 'default.writer@example.com'
+        ]);
     }
 }
