@@ -52,4 +52,9 @@ class User extends Authenticatable
             'status' => UserStatus::class
         ];
     }
+
+    public function getIsEditorAttribute(): bool 
+    {
+        return $this->type === UserType::EDITOR;
+    }
 }

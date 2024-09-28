@@ -16,6 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+
             </div>
 
             <!-- Settings Dropdown -->
@@ -37,6 +38,13 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
+
+                        @if (Auth::user()->is_editor)
+                        <!-- Editor Links -->
+                        <x-dropdown-link :href="route('company.index')">
+                            {{ __('Company') }}
+                        </x-dropdown-link>
+                        @endif 
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
