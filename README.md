@@ -42,3 +42,6 @@ The default writers has the following credentials:
 email: default.writer@example.com
 password: password
 ```
+
+## Live
+Live deployment available in http://142.93.1.249/.
