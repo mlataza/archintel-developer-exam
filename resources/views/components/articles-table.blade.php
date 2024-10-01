@@ -54,12 +54,8 @@
                 {{ $article->created_at->setTimezone('Asia/Manila') }}
             </td>
             <td class="px-6 py-4">
-                @if (auth()->user()->is_editor)
+                @if ($article->canEdit(Auth::user()))
                 <x-secondary-button-link :href="route('article.edit', $article)">Edit</x-secondary-button-link>
-                @else
-                @if ($article->writer_id === auth()->user()->id && $article->status === App\Enums\ArticleStatus::FOR_EDIT)
-                <x-secondary-button-link :href="route('article.edit', $article)">Edit</x-secondary-button-link>
-                @endif
                 @endif
             </td>
         </tr>

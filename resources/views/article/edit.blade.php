@@ -62,16 +62,14 @@
                             </div>
 
                             <div class="flex items-center gap-4">
-                                @if (auth()->user()->is_editor)
-                                <x-primary-button name="action" value="save">{{ __('Save') }}</x-primary-button>
+                                @if ($article->canEdit(Auth::user()))
+                                <x-primary-button name="action" value="edit">{{ __('Save') }}</x-primary-button>
+                                @endif 
 
-                                @if ($article->status === App\Enums\ArticleStatus::FOR_EDIT)
+                                @if ($article->canPublish(Auth::user()))
                                 <x-primary-button name="action" value="publish">{{ __('Publish') }}</x-primary-button>
                                 @endif
                                 
-                                @else
-                                <x-primary-button>{{ __('Edit') }}</x-primary-button>
-                                @endif
                                 <x-secondary-button-link :href="route('dashboard')">{{ __('Cancel') }}</x-secondary-button-link>
                             </div>
                         </form>

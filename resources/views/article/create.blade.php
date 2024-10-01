@@ -61,6 +61,7 @@
 
                             <div class="flex items-center gap-4">
                                 <x-primary-button>{{ __('Create') }}</x-primary-button>
+                                <x-secondary-button-link :href="route('dashboard')">{{ __('Cancel') }}</x-secondary-button-link>
                             </div>
                         </form>
                     </section>

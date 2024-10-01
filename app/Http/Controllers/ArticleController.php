@@ -30,8 +30,7 @@ class ArticleController extends Controller
     public function create()
     {
         // Prevent editor from accessing the article creation page
-        $user = User::find(Auth::user()->id);
-        if ($user->is_editor) {
+        if (!Article::canCreate(Auth::user())) {
             return Redirect::route('dashboard')->with('status', 'not-allowed');
         }
 
@@ -46,6 +45,11 @@ class ArticleController extends Controller
      */
     public function store(ArticleStoreRequest $request)
     {
+        // Prevent editor from accessing the article creation page
+        if (!Article::canCreate(Auth::user())) {
+            return Redirect::route('dashboard')->with('status', 'not-allowed');
+        }
+
         // Get the data
         $data = $request->validated();
 
@@ -79,11 +83,8 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         // Make sure that writer can only edit his/her own articles
-        $user = User::find(Auth::user()->id);
-        if (!$user->is_editor) {
-            if ($article->writer_id !== $user->id || $article->status !== ArticleStatus::FOR_EDIT) {
-                return Redirect::route('dashboard')->with('status', 'not-allowed');
-            }
+        if (!$article->canEdit(Auth::user())) {
+            return Redirect::route('dashboard')->with('status', 'not-allowed');
         }
 
         return view('article.edit', [
@@ -106,17 +107,10 @@ class ArticleController extends Controller
             Storage::disk('public')->delete($article->image);
             $article->image = $imagePath;
         }
-        
-        // Do editor specific actions
-        $user = User::find(Auth::user()->id);
-        if ($user->is_editor) {
-            // Update the editor 
-            $article->editor_id = $user->id;
 
-            // Check if action is published
-            if ($article->status === ArticleStatus::FOR_EDIT && $request->action === "publish") {
-                $article->status = ArticleStatus::PUBLISHED;
-            }
+        // Check if action is published
+        if ($article->canPublish(Auth::user()) && $request->action === "publish") {
+            $article->status = ArticleStatus::PUBLISHED;
         }
 
         // Save changes to the article
