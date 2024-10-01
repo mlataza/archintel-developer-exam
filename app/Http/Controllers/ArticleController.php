@@ -7,23 +7,12 @@ use App\Http\Requests\ArticleStoreRequest;
 use App\Http\Requests\ArticleUpdateRequest;
 use App\Models\Article;
 use App\Models\Company;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -70,14 +59,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Article $article)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Article $article)
@@ -117,13 +98,5 @@ class ArticleController extends Controller
         $article->save();
 
         return Redirect::route('dashboard')->with('status', 'article-updated');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Article $article)
-    {
-        //
     }
 }

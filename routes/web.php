@@ -81,5 +81,6 @@ require __DIR__ . '/auth.php';
 
 Route::middleware('auth')->group(function () {
     Route::resource('company', CompanyController::class);
-    Route::resource('article', ArticleController::class);
+    Route::resource('article', ArticleController::class)
+        ->except(['index', 'show', 'destroy']);
 });
