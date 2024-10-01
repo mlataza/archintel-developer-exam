@@ -18,7 +18,7 @@ class ArticleUpdateRequest extends FormRequest
 
         return [
             'title' => ['required', 'string', 'max:255'],
-            'image_path' => ['nullable', File::types(['jpg', 'png', 'bmp'])],
+            'image_path' => ['nullable', File::types(['jpg', 'png', 'bmp'])->max(1024)],
             'link' => ['required', 'url'],
             'content' => ['required'],
             'company_id' => ['required'],

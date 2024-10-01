@@ -16,7 +16,7 @@ class CompanyUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'logo_path' => ['nullable', File::types(['jpg', 'png', 'bmp'])],
+            'logo_path' => ['nullable', File::types(['jpg', 'png', 'bmp'])->max(1024)],
             'status' => ['required', 'in:Active,Inactive']
         ];
     }
