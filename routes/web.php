@@ -4,6 +4,7 @@ use App\Enums\ArticleStatus;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\UserController;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -84,4 +85,5 @@ Route::middleware('auth')->group(function () {
         ->except(['create', 'show', 'destroy']);
     Route::resource('article', ArticleController::class)
         ->except(['index', 'show', 'destroy']);
+    Route::resource('user', UserController::class);
 });
