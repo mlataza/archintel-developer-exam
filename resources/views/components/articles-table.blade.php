@@ -25,9 +25,6 @@
                 Created At
             </th>
             <th scope="col" class="px-6 py-3">
-                Updated At
-            </th>
-            <th scope="col" class="px-6 py-3">
                 Actions
             </th>
         </tr>
@@ -57,11 +54,8 @@
                 {{ $article->created_at->setTimezone('Asia/Manila') }}
             </td>
             <td class="px-6 py-4">
-                {{ $article->updated_at->setTimezone('Asia/Manila') }}
-            </td>
-            <td class="px-6 py-4">
                 @if (auth()->user()->is_editor)
-                <!-- TODO: Add actions for editor -->
+                <x-secondary-button-link :href="route('article.edit', $article)">Edit</x-secondary-button-link>
                 @else
                 @if ($article->writer_id === auth()->user()->id && $article->status === App\Enums\ArticleStatus::FOR_EDIT)
                 <x-secondary-button-link :href="route('article.edit', $article)">Edit</x-secondary-button-link>
@@ -71,7 +65,7 @@
         </tr>
         @empty
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <td colspan="9" class="px-6 py-4 text-center">
+            <td colspan="8" class="px-6 py-4 text-center">
                 {{ __('Nothing to display!') }}
             </td>
         </tr>
