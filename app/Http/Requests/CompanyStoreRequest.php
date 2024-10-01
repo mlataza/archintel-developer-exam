@@ -16,7 +16,7 @@ class CompanyStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'logo' => ['required', File::types(['jpg', 'png', 'bmp'])]
+            'logo_path' => ['required', File::types(['jpg', 'png', 'bmp'])]
         ];
     }
 }

@@ -32,8 +32,8 @@
 
                             <div>
                                 <x-input-label for="edit_company_logo" :value="__('Logo')" />
-                                <x-file-input id="edit_company_logo" name="logo" type="file" class="mt-1 block w-full" accept=".jpg,.png,.bmp" />
-                                <x-input-error :messages="$errors->get('logo')" class="mt-2" />
+                                <x-file-input id="edit_company_logo" name="logo_path" type="file" class="mt-1 block w-full" accept=".jpg,.png,.bmp" />
+                                <x-input-error :messages="$errors->get('logo_path')" class="mt-2" />
 
                                 <img src="{{ $company->logo_url }}" class="max-w-24 rounded mt-3" />
                             </div>

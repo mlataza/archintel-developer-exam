@@ -35,15 +35,14 @@ class CompanyController extends Controller
      */
     public function store(CompanyStoreRequest $request)
     {
-        // Upload the logo file to the server
-        $logoPath = $request->file('logo')->store('logos', 'public');
-
-        // Create the company
-        Company::create([
-            'name' => $request->validated()['name'],
-            'logo' => $logoPath,
-            'status' => CompanyStatus::ACTIVE
-        ]);
+        // Create the company and upload the logo to the server
+        Company::create(array_merge(
+            $request->validated(),
+            [
+                'logo' => $request->file('logo_path')->store('logos', 'public'),
+                'status' => CompanyStatus::ACTIVE
+            ]
+        ));
 
         return Redirect::route('company.index')->with('status', 'company-created');
     }
@@ -69,12 +68,13 @@ class CompanyController extends Controller
      */
     public function update(CompanyUpdateRequest $request, Company $company)
     {
+        // Update company detail
         $company->fill($request->validated());
 
         // If logo is specified, then delete the previous and upload the new one 
-        if ($request->file('logo')) {
-            $logoPath = $request->file('logo')->store('logos', 'public');
-            Storage::delete($company->logo);
+        if ($request->file('logo_path')) {
+            $logoPath = $request->file('logo_path')->store('logos', 'public');
+            Storage::disk('public')->delete($company->logo);
             $company->logo = $logoPath;
         }
 

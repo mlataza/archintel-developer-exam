@@ -32,8 +32,8 @@
 
                             <div>
                                 <x-input-label for="create_company_logo" :value="__('Logo')" />
-                                <x-file-input id="create_company_logo" name="logo" type="file" class="mt-1 block w-full" accept=".jpg,.png,.bmp" :value="old('logo')" />
-                                <x-input-error :messages="$errors->get('logo')" class="mt-2" />
+                                <x-file-input id="create_company_logo" name="logo_path" type="file" class="mt-1 block w-full" accept=".jpg,.png,.bmp" :value="old('logo')" />
+                                <x-input-error :messages="$errors->get('logo_path')" class="mt-2" />
                             </div>
 
                             <div class="flex items-center gap-4">
