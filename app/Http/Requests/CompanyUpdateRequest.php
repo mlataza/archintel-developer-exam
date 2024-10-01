@@ -20,4 +20,11 @@ class CompanyUpdateRequest extends FormRequest
             'status' => ['required', 'in:Active,Inactive']
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'logo_path' => 'logo'
+        ];
+    }
 }

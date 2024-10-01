@@ -22,4 +22,11 @@ class ArticleStoreRequest extends FormRequest
             'company_id' => ['required'],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'image_path' => 'image'
+        ];
+    }
 }

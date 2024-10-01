@@ -14,14 +14,19 @@ class ArticleUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        // TODO: Modify rules for the editor
-
         return [
             'title' => ['required', 'string', 'max:255'],
             'image_path' => ['nullable', File::types(['jpg', 'png', 'bmp'])->max(1024)],
             'link' => ['required', 'url'],
             'content' => ['required'],
             'company_id' => ['required'],
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'image_path' => 'image'
         ];
     }
 }

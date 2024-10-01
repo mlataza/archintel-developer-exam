@@ -19,4 +19,11 @@ class CompanyStoreRequest extends FormRequest
             'logo_path' => ['required', File::types(['jpg', 'png', 'bmp'])->max(1024)]
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'logo_path' => 'logo'
+        ];
+    }
 }
