@@ -20,7 +20,7 @@ class CompanyController extends Controller
     {
         // Only allow editor to open this page
         if (!Auth::user()->is_editor) {
-            return Redirect::route('dashboard')->with('status', 'not-allowed');
+            return Redirect::route('dashboard')->with('status', 'Not allowed!');
         }
 
         return view('company.index', [
@@ -39,7 +39,7 @@ class CompanyController extends Controller
         }
 
         // Create the company and upload the logo to the server
-        Company::create(array_merge(
+        $company = Company::create(array_merge(
             $request->validated(),
             [
                 'logo' => $request->file('logo_path')->store('logos', 'public'),
@@ -47,7 +47,9 @@ class CompanyController extends Controller
             ]
         ));
 
-        return Redirect::route('company.index')->with('status', 'company-created');
+        return Redirect::route('company.index')
+            ->with('status', "Company $company->id created!")
+            ->with('status-type', 'green');
     }
 
     /**
@@ -57,7 +59,7 @@ class CompanyController extends Controller
     {
         // Only allow editor to open this page
         if (!Auth::user()->is_editor) {
-            return Redirect::route('dashboard')->with('status', 'not-allowed');
+            return Redirect::route('dashboard')->with('status', 'Not allowed!');
         }
 
         return view('company.edit', compact('company'));
@@ -70,9 +72,9 @@ class CompanyController extends Controller
     {
         // Only allow editor to open this page
         if (!Auth::user()->is_editor) {
-            return Redirect::route('dashboard')->with('status', 'not-allowed');
+            return Redirect::route('dashboard')->with('status', 'Not allowed!');
         }
-        
+
         // Update company detail
         $company->fill($request->validated());
 
@@ -85,6 +87,8 @@ class CompanyController extends Controller
 
         $company->save();
 
-        return Redirect::route('company.index')->with('status', 'company-updated');
+        return Redirect::route('company.index')
+            ->with('status', "Company $company->id updated!")
+            ->with('status-type', 'green');
     }
 }
