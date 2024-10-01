@@ -15,13 +15,30 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
+    // Get the current user 
+    $user = User::find(Auth::user()->id);
+
     if (Auth::user()->is_editor) {
-        return view('dashboard');
+        // Show the publisher dashboard
+        $forPublishArticles = Article::with(['writer', 'editor'])
+            ->where('status', ArticleStatus::FOR_EDIT)
+            ->latest()
+            ->get();
+
+        $publishedArticles = $user
+            ->edited_articles()
+            ->with(['writer', 'editor'])
+            ->where('status', ArticleStatus::PUBLISHED)
+            ->latest()
+            ->get();
+        
+        return view('editor.dashboard', [
+            'for_publish_articles' => $forPublishArticles,
+            'published_articles' => $publishedArticles
+        ]);
     }
 
     // Show the writer dashboard
-    $user = User::find(Auth::user()->id);
-
     $forEditArticles = $user
         ->written_articles()
         ->with(['writer', 'editor'])
