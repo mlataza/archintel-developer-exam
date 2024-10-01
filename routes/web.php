@@ -80,7 +80,8 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 Route::middleware('auth')->group(function () {
-    Route::resource('company', CompanyController::class);
+    Route::resource('company', CompanyController::class)
+        ->except(['create', 'show', 'destroy']);
     Route::resource('article', ArticleController::class)
         ->except(['index', 'show', 'destroy']);
 });

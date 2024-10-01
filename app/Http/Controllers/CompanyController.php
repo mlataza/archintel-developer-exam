@@ -8,6 +8,7 @@ use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use Illuminate\Support\Facades\Redirect;
 use App\Enums\CompanyStatus;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
@@ -17,17 +18,14 @@ class CompanyController extends Controller
      */
     public function index()
     {
+        // Only allow editor to open this page
+        if (!Auth::user()->is_editor) {
+            return Redirect::route('dashboard')->with('status', 'not-allowed');
+        }
+
         return view('company.index', [
             'companies' => Company::latest()->get()
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -35,6 +33,11 @@ class CompanyController extends Controller
      */
     public function store(CompanyStoreRequest $request)
     {
+        // Only allow editor to open this page
+        if (!Auth::user()->is_editor) {
+            return Redirect::route('dashboard')->with('status', 'not-allowed');
+        }
+
         // Create the company and upload the logo to the server
         Company::create(array_merge(
             $request->validated(),
@@ -48,18 +51,15 @@ class CompanyController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Company $company)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Company $company)
     {
+        // Only allow editor to open this page
+        if (!Auth::user()->is_editor) {
+            return Redirect::route('dashboard')->with('status', 'not-allowed');
+        }
+
         return view('company.edit', compact('company'));
     }
 
@@ -68,6 +68,11 @@ class CompanyController extends Controller
      */
     public function update(CompanyUpdateRequest $request, Company $company)
     {
+        // Only allow editor to open this page
+        if (!Auth::user()->is_editor) {
+            return Redirect::route('dashboard')->with('status', 'not-allowed');
+        }
+        
         // Update company detail
         $company->fill($request->validated());
 
@@ -81,13 +86,5 @@ class CompanyController extends Controller
         $company->save();
 
         return Redirect::route('company.index')->with('status', 'company-updated');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Company $company)
-    {
-        //
     }
 }
