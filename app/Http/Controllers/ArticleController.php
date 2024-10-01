@@ -7,6 +7,7 @@ use App\Http\Requests\ArticleStoreRequest;
 use App\Http\Requests\ArticleUpdateRequest;
 use App\Models\Article;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -28,7 +29,11 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        // TODO: Prevent editor from accessing this page
+        // Prevent editor from accessing the article creation page
+        $user = User::find(Auth::user()->id);
+        if ($user->is_editor) {
+            return Redirect::route('dashboard')->with('status', 'not-allowed');
+        }
 
         // Get the list of companies
         return view('article.create', [
@@ -73,9 +78,15 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        // TODO: Show different edit page for editor 
+        // Make sure that writer can only edit his/her own articles
+        $user = User::find(Auth::user()->id);
+        if (!$user->is_editor) {
+            if ($article->writer_id !== $user->id || $article->status !== ArticleStatus::FOR_EDIT) {
+                return Redirect::route('dashboard')->with('status', 'not-allowed');
+            }
+        }
 
-        return view('article.writer.edit', [
+        return view('article.edit', [
             'article' => $article,
             'companies' => Company::latest()->get()
         ]);
@@ -86,8 +97,6 @@ class ArticleController extends Controller
      */
     public function update(ArticleUpdateRequest $request, Article $article)
     {
-        // TODO: Perform different update for editor 
-
         // Update the article
         $article->fill($request->validated());
 
@@ -97,11 +106,23 @@ class ArticleController extends Controller
             Storage::disk('public')->delete($article->image);
             $article->image = $imagePath;
         }
+        
+        // Do editor specific actions
+        $user = User::find(Auth::user()->id);
+        if ($user->is_editor) {
+            // Update the editor 
+            $article->editor_id = $user->id;
+
+            // Check if action is published
+            if ($article->status === ArticleStatus::FOR_EDIT && $request->action === "publish") {
+                $article->status = ArticleStatus::PUBLISHED;
+            }
+        }
 
         // Save changes to the article
         $article->save();
 
-        return Redirect::route('article.edit', $article)->with('status', 'article-updated');
+        return Redirect::route('dashboard')->with('status', 'article-updated');
     }
 
     /**
