@@ -20,7 +20,7 @@ class ArticleController extends Controller
     {
         // Prevent editor from accessing the article creation page
         if (!Article::canCreate(Auth::user())) {
-            return Redirect::route('dashboard')->with('status', 'not-allowed');
+            return Redirect::route('dashboard')->with('status', 'Not allowed!');
         }
 
         // Get the list of companies
@@ -36,7 +36,7 @@ class ArticleController extends Controller
     {
         // Prevent editor from accessing the article creation page
         if (!Article::canCreate(Auth::user())) {
-            return Redirect::route('dashboard')->with('status', 'not-allowed');
+            return Redirect::route('dashboard')->with('status', 'Not allowed!');
         }
 
         // Get the data
@@ -53,9 +53,11 @@ class ArticleController extends Controller
         $data['status'] = ArticleStatus::FOR_EDIT;
 
         // Create the article and save it in the database
-        Article::create($data);
+        $article = Article::create($data);
 
-        return Redirect::route('dashboard')->with('status', 'article-created');
+        return Redirect::route('dashboard')
+            ->with('status', "Article $article->id created!")
+            ->with('status-type', 'green');
     }
 
     /**
@@ -65,7 +67,7 @@ class ArticleController extends Controller
     {
         // Make sure that writer can only edit his/her own articles
         if (!$article->canEdit(Auth::user())) {
-            return Redirect::route('dashboard')->with('status', 'not-allowed');
+            return Redirect::route('dashboard')->with('status', 'Not allowed!');
         }
 
         return view('article.edit', [
@@ -89,6 +91,11 @@ class ArticleController extends Controller
             $article->image = $imagePath;
         }
 
+        // Set the article editor
+        if (Auth::user()->is_editor) {
+            $article->editor_id = Auth::user()->id;
+        }
+
         // Check if action is published
         if ($article->canPublish(Auth::user()) && $request->action === "publish") {
             $article->status = ArticleStatus::PUBLISHED;
@@ -97,6 +104,8 @@ class ArticleController extends Controller
         // Save changes to the article
         $article->save();
 
-        return Redirect::route('dashboard')->with('status', 'article-updated');
+        return Redirect::route('dashboard')
+            ->with('status', $article->status === ArticleStatus::PUBLISHED ? "Article $article->id published!" : "Article $article->id updated!")
+            ->with('status-type', 'green');
     }
 }
