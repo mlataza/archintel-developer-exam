@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Enums\UserType;
 use App\Enums\UserStatus;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -56,5 +57,15 @@ class User extends Authenticatable
     public function getIsEditorAttribute(): bool 
     {
         return $this->type === UserType::EDITOR;
+    }
+
+    public function written_articles(): HasMany
+    {
+        return $this->hasMany(Article::class, 'writer_id');
+    }
+
+    public function edited_articles(): HasMany
+    {
+        return $this->hasMany(Article::class, 'editor_id');
     }
 }
