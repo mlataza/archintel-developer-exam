@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ArticleStatus;
+use App\Enums\CompanyStatus;
 use App\Http\Requests\ArticleStoreRequest;
 use App\Http\Requests\ArticleUpdateRequest;
 use App\Models\Article;
@@ -25,7 +26,7 @@ class ArticleController extends Controller
 
         // Get the list of companies
         return view('article.create', [
-            'companies' => Company::latest()->get()
+            'companies' => Company::where('status', CompanyStatus::ACTIVE)->latest()->get()
         ]);
     }
 
@@ -72,7 +73,7 @@ class ArticleController extends Controller
 
         return view('article.edit', [
             'article' => $article,
-            'companies' => Company::latest()->get()
+            'companies' => Company::where('status', CompanyStatus::ACTIVE)->latest()->get()
         ]);
     }
 
