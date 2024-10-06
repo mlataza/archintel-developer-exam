@@ -44,4 +44,4 @@ password: password
 ```
 
 ## Live
-Live deployment available in http://142.93.1.249/.
+Live deployment available in https://archintel.lambdasys.dev/.
