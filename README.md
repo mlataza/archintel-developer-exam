@@ -45,3 +45,4 @@ password: password
 
 ## Live
 Live deployment available in https://archintel.lambdasys.dev/.
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=e67c5a2c7347&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
